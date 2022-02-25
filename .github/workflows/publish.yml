@@ -55,7 +55,7 @@ jobs:
           NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}
           
       - name: npm publish
-        run: npm --prefix ./npm-publish publish --access public
+        run: npm publish ./npm-publish  --access public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
