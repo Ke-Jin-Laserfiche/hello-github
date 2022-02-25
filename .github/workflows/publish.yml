@@ -43,13 +43,13 @@ jobs:
 
 
       - name: npm version
-        run: npm version ${NpmPackageVersion}
+        run: npm --prefix ./npm-publish version ${NpmPackageVersion}
         if: ${{ ! github.event.inputs.isProduction }}
         env:
           NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}-preview-${{ github.run_id }}
           
       - name: npm version
-        run: npm version ${NpmPackageVersion}
+        run: npm --prefix ./npm-publish version ${NpmPackageVersion}
         if: ${{ github.event.inputs.isProduction }}
         env:
           NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}
