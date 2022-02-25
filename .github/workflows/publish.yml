@@ -56,7 +56,17 @@ jobs:
           NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}
           
       - name: npm publish
-        run: npm publish ./npm-publish  --access public
+        run: npm publish ./npm-publish  --access public --tag next
+        if: ${{ ! github.event.inputs.isProduction }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+
+      - name: npm publish
+        run: npm publish ./npm-publish  --access public --tag latest
+        if: ${{ github.event.inputs.isProduction }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
