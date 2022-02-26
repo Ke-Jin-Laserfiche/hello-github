@@ -41,19 +41,26 @@ jobs:
 
       - name: 'Echo build number'
         run: echo "${{github.run_id}}"
+        
+      - name: Echo workflow input isProduction
+        run: echo ${{ github.event.inputs.isProduction }}
+        
+      - name: 'set up variable: NpmPackageVersion'
+        if: ${{ github.event.inputs.isProduction }}
+        run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
+        
+      - name: 'set up variable: NpmPackageVersion'
+        if: ${{ ! github.event.inputs.isProduction }}
+        run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
 
       - name: npm version
         run: npm --prefix ./npm-publish version ${NpmPackageVersion}
         if: ${{ ! github.event.inputs.isProduction }}
-        env:
-          NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}-preview-${{ github.run_id }}
           
       - name: npm version
         run: npm --prefix ./npm-publish version ${NpmPackageVersion}
         if: ${{ github.event.inputs.isProduction }}
-        env:
-          NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}
           
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag next
