@@ -44,11 +44,11 @@ jobs:
         run: echo ${{ github.event.inputs.isProduction }}
         
       - name: 'set up variable: NpmPackageVersion'
-        if: ${{ github.event.inputs.isProduction }}
+        if: ${{ github.event.inputs.isProduction == "true"}}
         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
         
       - name: 'set up variable: NpmPackageVersion'
-        if: ${{ ! github.event.inputs.isProduction }}
+        if: ${{ ! github.event.inputs.isProduction  == "false"}}
         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
 
@@ -62,7 +62,7 @@ jobs:
           
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag next
-        if: ${{ ! github.event.inputs.isProduction }}
+        if: ${{ github.event.inputs.isProduction == "false" }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -80,7 +80,7 @@ jobs:
 
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag latest
-        if: ${{ github.event.inputs.isProduction }}
+        if: ${{ github.event.inputs.isProduction == "true"}}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
