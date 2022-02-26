@@ -15,7 +15,7 @@ on:
       isProduction:
         description: 'production build'
         required: true
-        default: 'false'
+        default: false
 
 env:
   MAJOR_VERSION: 1
