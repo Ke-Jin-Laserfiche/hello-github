@@ -22,12 +22,11 @@ on:
 env:
   MAJOR_VERSION: 1
   MINOR_VERSION: 0
-  PATCH_VERSION: 1
+  PATCH_VERSION: 2
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -70,6 +69,12 @@ jobs:
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+
+
+  publish:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: production
 
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag latest
