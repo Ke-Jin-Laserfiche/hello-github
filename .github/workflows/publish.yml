@@ -42,7 +42,7 @@ jobs:
         run: echo "${{github.run_id}}"
         
       - name: Echo workflow input isProduction
-        run: echo "${{isProduction}}"
+        run: echo "${{env.isProduction}}"
         
       - name: 'set up variable: NpmPackageVersion'
         if: ${{ github.event.inputs.isProduction == 'true'}}
