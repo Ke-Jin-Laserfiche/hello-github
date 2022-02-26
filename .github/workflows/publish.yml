@@ -29,6 +29,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    env:
+      isProduction: ${{ github.event.inputs.isProduction }}
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -40,7 +42,7 @@ jobs:
         run: echo "${{github.run_id}}"
         
       - name: Echo workflow input isProduction
-        run: echo ${{ github.event.inputs.isProduction }}
+        run: echo "$isProduction"
         
       - name: 'set up variable: NpmPackageVersion'
         if: ${{ github.event.inputs.isProduction == 'true'}}
