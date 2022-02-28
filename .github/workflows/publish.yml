@@ -39,7 +39,7 @@ jobs:
 
 
       - name: Echo build number
-        run: echo "${{github.run_id}}"
+        run: echo ${{github.run_id}}
         
       - name: Echo workflow input isProduction
         run: echo ${{ env.isProduction }}
