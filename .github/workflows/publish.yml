@@ -55,7 +55,13 @@ jobs:
       - name: npm version
         run: npm --prefix ./npm-publish version ${{ env.NpmPackageVersion }}
           
-          
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: npm-publish-artifact
+          # A file, directory or wildcard pattern that describes what to upload
+          path: ./npm-publish     
+    
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag next
         if: ${{ ! env.isProduction }}
@@ -74,6 +80,12 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v2.1.0
+        with:
+          name: npm-publish-artifact
+          path: ./npm-publish
 
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag latest
