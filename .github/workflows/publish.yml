@@ -19,10 +19,10 @@ on:
         default: 'false'
 
 env:
+  isProduction: ${{ github.event.inputs.isProduction }}
   # MAJOR_VERSION: 1
   # MINOR_VERSION: 0
   # PATCH_VERSION: 2
-  isProduction: ${{ github.event.inputs.isProduction }}
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -39,6 +39,8 @@ jobs:
 
       # - name: Echo build number
       #   run: echo ${{github.run_id}}
+      - name: Run input variable from events
+        run: echo  ${{ github.event.inputs.isProduction }}
         
       - name: Echo workflow input isProduction
         run: echo ${{ env.isProduction }}
