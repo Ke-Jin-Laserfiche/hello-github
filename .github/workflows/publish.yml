@@ -38,17 +38,17 @@ jobs:
       - uses: actions/checkout@v2
 
 
-      - name: 'Echo build number'
+      - name: Echo build number
         run: echo "${{github.run_id}}"
         
       - name: Echo workflow input isProduction
-        run: echo "${{ env.isProduction }}"
+        run: echo ${{ env.isProduction }}
         
-      - name: 'set up variable: NpmPackageVersion'
+      - name: set up variable -- NpmPackageVersion
         if: ${{ github.event.inputs.isProduction }}
         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
         
-      - name: 'set up variable: NpmPackageVersion'
+      - name: set up variable -- NpmPackageVersion
         if: ${{ ! github.event.inputs.isProduction }}
         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
