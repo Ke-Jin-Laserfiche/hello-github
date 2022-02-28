@@ -19,9 +19,9 @@ on:
         default: 'false'
 
 env:
-  MAJOR_VERSION: 1
-  MINOR_VERSION: 0
-  PATCH_VERSION: 2
+  # MAJOR_VERSION: 1
+  # MINOR_VERSION: 0
+  # PATCH_VERSION: 2
   isProduction: ${{ github.event.inputs.isProduction }}
 
 
