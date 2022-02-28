@@ -2,6 +2,7 @@
 
 name: publish
 
+# Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
@@ -11,62 +12,71 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
     inputs:
       isProduction:
         description: 'production build'
         type: boolean
         required: true
         default: 'false'
-
 env:
+  isProduction: ${{ github.event.inputs.isProduction }}
   MAJOR_VERSION: 1
   MINOR_VERSION: 0
-  PATCH_VERSION: 1
+  PATCH_VERSION: 2
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: production
+    environment: preview
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Echo build number
+        run: echo ${{github.run_id}}
 
-      - name: 'Echo build number'
-        run: echo "${{github.run_id}}"
+      - name: Echo workflow input isProduction
+        run: echo ${{ env.isProduction }}
+        
+      - name: set up variable -- NpmPackageVersion
+        if: ${{ env.isProduction }}
+        run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
+        
+      - name: set up variable -- NpmPackageVersion
+        if: ${{ ! env.isProduction }}
+        run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
 
       - name: npm version
-        run: npm --prefix ./npm-publish version ${NpmPackageVersion}
-        if: ${{ ! github.event.inputs.isProduction }}
-        env:
-          NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}-preview-${{ github.run_id }}
+        run: npm --prefix ./npm-publish version ${{ env.NpmPackageVersion }}
           
-      - name: npm version
-        run: npm --prefix ./npm-publish version ${NpmPackageVersion}
-        if: ${{ github.event.inputs.isProduction }}
-        env:
-          NpmPackageVersion: ${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}
           
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag next
-        if: ${{ ! github.event.inputs.isProduction }}
+        if: ${{ ! env.isProduction }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
 
+
+  publish:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: production
+    if: ${{  github.event.inputs.isProduction }}
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
       - name: npm publish
         run: npm publish ./npm-publish  --access public --tag latest
-        if: ${{ github.event.inputs.isProduction }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
