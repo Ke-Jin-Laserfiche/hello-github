@@ -65,6 +65,9 @@ jobs:
 
       - name: npm build
         run: npm run build
+
+      - name: gulp replaceImportsInIndex
+        run: gulp replaceImportsInIndex
           
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.3.1
