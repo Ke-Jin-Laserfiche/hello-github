@@ -53,17 +53,20 @@ jobs:
 
 
       - name: npm version
-        run: npm --prefix ./npm-publish version ${{ env.NpmPackageVersion }}
+        run: npm version ${{ env.NpmPackageVersion }}
+
+      - name: npm build
+        run: npm run build
           
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.3.1
         with:
           name: npm-publish-artifact
           # A file, directory or wildcard pattern that describes what to upload
-          path: ./npm-publish     
+          path: ./dist    
     
       - name: npm publish
-        run: npm publish ./npm-publish  --access public --tag next
+        run: npm publish  --access public --tag next
         if: ${{ ! env.isProduction }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -85,10 +88,10 @@ jobs:
         uses: actions/download-artifact@v2.1.0
         with:
           name: npm-publish-artifact
-          path: ./npm-publish
+          path: ./
 
       - name: npm publish
-        run: npm publish ./npm-publish  --access public --tag latest
+        run: npm publish  --access public --tag latest
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
