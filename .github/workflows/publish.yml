@@ -60,6 +60,8 @@ jobs:
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
 
+      - name: npm install
+        run: npm install
 
       - name: npm build
         run: npm run build
