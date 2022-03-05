@@ -1,7 +1,6 @@
 {
     "name": "@lf-ke-jin/sample-lib",
     "version": "1.0.0",
-    "type": "module",
     "dependencies": {
         "gulp": "^4.0.2",
         "gulp-replace": "^1.1.3",
