@@ -114,10 +114,13 @@ jobs:
           name: npm-publish-packagejson
           path: ./
 
-      - name: npm publish
-        run: npm publish  --access public --tag latest
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
-          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
-          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+      - name: Echo workflow input isProduction
+        run: echo ${{ env.isProduction }}
+
+      # - name: npm publish
+      #   run: npm publish  --access public --tag latest
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #     NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+      #     NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+      #     NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
