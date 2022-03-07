@@ -18,6 +18,13 @@ on:
         type: boolean
         required: true
         default: 'false'
+  workflow_call:
+    inputs:
+      isProduction:
+        description: 'production build'
+        type: boolean
+        required: true
+        default: false      
 env:
   isProduction: 'false'
   MAJOR_VERSION: 1
