@@ -19,7 +19,7 @@ on:
         required: true
         default: 'false'
 env:
-  isProduction: ${{ github.event.inputs.isProduction }}
+  isProduction: 'false'
   MAJOR_VERSION: 1
   MINOR_VERSION: 0
   PATCH_VERSION: 5
@@ -31,6 +31,9 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: preview
+    
+    env: 
+      isProduction: ${{ github.event.inputs.isProduction }}
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -97,6 +100,8 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: production
+    env:
+      isProduction: ${{ github.event.inputs.isProduction }}
     if: ${{  github.event.inputs.isProduction == 'true'}}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
