@@ -22,7 +22,7 @@ env:
   isProduction: ${{ github.event.inputs.isProduction }}
   MAJOR_VERSION: 1
   MINOR_VERSION: 0
-  PATCH_VERSION: 4
+  PATCH_VERSION: 5
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -44,11 +44,11 @@ jobs:
         run: echo ${{ env.isProduction }}
         
       - name: set up variable -- NpmPackageVersion
-        if: ${{ env.isProduction }}
+        if: ${{ env.isProduction == 'true'}}
         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
         
       - name: set up variable -- NpmPackageVersion
-        if: ${{ ! env.isProduction }}
+        if: ${{ env.isProduction  == 'false'}}
         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
 
@@ -85,7 +85,7 @@ jobs:
     
       - name: npm publish
         run: npm publish  --access public --tag next
-        if: ${{ ! env.isProduction }}
+        if: ${{ env.isProduction == 'false'}}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -97,7 +97,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: production
-    if: ${{  github.event.inputs.isProduction }}
+    if: ${{  github.event.inputs.isProduction == 'true'}}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -114,10 +114,13 @@ jobs:
           name: npm-publish-packagejson
           path: ./
 
-      - name: npm publish
-        run: npm publish  --access public --tag latest
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
-          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
-          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+      - name: Echo workflow input isProduction
+        run: echo ${{ env.isProduction }}
+
+      # - name: npm publish
+      #   run: npm publish  --access public --tag latest
+      #   env:
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #     NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+      #     NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+      #     NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
