@@ -18,13 +18,7 @@ on:
         type: boolean
         required: true
         default: 'false'
-  workflow_call:
-    inputs:
-      isProduction:
-        description: 'production build'
-        type: boolean
-        required: true
-        default: false      
+   
 env:
   isProduction: 'false'
   MAJOR_VERSION: 1
@@ -55,7 +49,11 @@ jobs:
         
       - name: Echo build number
         run: echo ${{github.run_id}}
-
+        
+      - name: set up variable -- isProduction
+        if: ${{ github.event_name == 'workflow_dispatch'}}
+        run: echo "isProduction=${{ github.event.inputs.isProduction }}" >> $GITHUB_ENV
+        
       - name: Echo workflow input isProduction
         run: echo ${{ env.isProduction }}
         
