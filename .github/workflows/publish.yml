@@ -18,8 +18,9 @@ on:
         type: boolean
         required: true
         default: 'false'
+   
 env:
-  isProduction: ${{ github.event.inputs.isProduction }}
+  isProduction: 'false'
   MAJOR_VERSION: 1
   MINOR_VERSION: 0
   PATCH_VERSION: 5
@@ -31,15 +32,26 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: preview
+    
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Echo event
+        run: echo ${{github.event_name}}
+        
+      - name: Echo event
+        run: echo ${{github.event_path}}
+        
       - name: Echo build number
         run: echo ${{github.run_id}}
-
+        
+      - name: set up variable -- isProduction
+        if: ${{ github.event_name == 'workflow_dispatch'}}
+        run: echo "isProduction=${{ github.event.inputs.isProduction }}" >> $GITHUB_ENV
+        
       - name: Echo workflow input isProduction
         run: echo ${{ env.isProduction }}
         
@@ -117,10 +129,10 @@ jobs:
       - name: Echo workflow input isProduction
         run: echo ${{ env.isProduction }}
 
-      # - name: npm publish
-      #   run: npm publish  --access public --tag latest
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #     NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
-      #     NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
-      #     NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+      - name: npm publish
+        run: npm publish  --access public --tag latest
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
