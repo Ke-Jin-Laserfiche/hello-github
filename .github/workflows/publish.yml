@@ -33,8 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: preview
     
-    env: 
-      isProduction: ${{ github.event.inputs.isProduction }}
       
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
