@@ -55,62 +55,60 @@ jobs:
       - name: Echo workflow input isProduction
         run: echo ${{ env.isProduction }}
         
-#       - name: set up variable -- NpmPackageVersion
-#         if: ${{ env.isProduction == 'true'}}
-#         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
+      - name: set up variable -- NpmPackageVersion
+        if: ${{ env.isProduction == 'true'}}
+        run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
         
-#       - name: set up variable -- NpmPackageVersion
-#         if: ${{ env.isProduction  == 'false'}}
-#         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
+      - name: set up variable -- NpmPackageVersion
+        if: ${{ env.isProduction  == 'false'}}
+        run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
 
-#       - name: npm version
-#         run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
-#         env:
-#           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-#           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
-#           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
-#           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+      - name: npm version
+        run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
 
-#       - name: npm install
-#         run: npm install
+      - name: npm install
+        run: npm install
 
-#       - name: npm build
-#         run: npm run build
+      - name: npm build
+        run: npm run build
 
-#       # - name: gulp replaceImportsInIndex
-#       #   run: gulp replaceImportsInIndex
+      # - name: gulp replaceImportsInIndex
+      #   run: gulp replaceImportsInIndex
           
-#       - name: Upload a Build Artifact
-#         uses: actions/upload-artifact@v2.3.1
-#         with:
-#           name: npm-publish-artifact
-#           # A file, directory or wildcard pattern that describes what to upload
-#           path: ./dist    
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: npm-publish-artifact
+          # A file, directory or wildcard pattern that describes what to upload
+          path: ./dist    
 
-#       - name: Upload a Build Artifact
-#         uses: actions/upload-artifact@v2.3.1
-#         with:
-#           name: npm-publish-packagejson
-#           # A file, directory or wildcard pattern that describes what to upload
-#           path: ./package.json    
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: npm-publish-packagejson
+          # A file, directory or wildcard pattern that describes what to upload
+          path: ./package.json    
     
-#       - name: npm publish
-#         run: npm publish  --access public --tag next
-#         if: ${{ env.isProduction == 'false'}}
-#         env:
-#           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-#           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
-#           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
-#           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+      - name: npm publish
+        run: npm publish  --access public --tag next
+        if: ${{ env.isProduction == 'false'}}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
 
 
   publish:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: production
-    env:
-      isProduction: ${{ github.event.inputs.isProduction }}
     if: ${{  github.event.inputs.isProduction == 'true'}}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -131,10 +129,10 @@ jobs:
       - name: Echo workflow input isProduction
         run: echo ${{ env.isProduction }}
 
-      # - name: npm publish
-      #   run: npm publish  --access public --tag latest
-      #   env:
-      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #     NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
-      #     NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
-      #     NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+      - name: npm publish
+        run: npm publish  --access public --tag latest
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
