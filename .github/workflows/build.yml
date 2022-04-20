@@ -65,9 +65,9 @@ jobs:
 
       - name: store versions to txt files
         run: |
-          expr ${{ env.MAJOR_VERSION }} > major.txt
-          expr ${{ env.MINOR_VERSION }} > minor.txt
-          expr ${{ env.PATCH_VERSION }} > patch.txt
+          echo ${{ env.MAJOR_VERSION }} > major.txt
+          echo ${{ env.MINOR_VERSION }} > minor.txt
+          echo ${{ env.PATCH_VERSION }} > patch.txt
 
       - name: npm version
         run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
