@@ -97,4 +97,5 @@ jobs:
             ./major.txt
             ./minor.txt
             ./patch.txt
+            ./.npmrc
 
