@@ -29,7 +29,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: preview
     
       
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -64,6 +63,11 @@ jobs:
         if: ${{ env.isProduction  == 'false'}}
         run: echo "NpmPackageVersion=${{ env.MAJOR_VERSION }}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
+      - name: store versions to txt files
+        run: |
+          expr ${{ env.MAJOR_VERSION }} > major.txt
+          expr ${{ env.MINOR_VERSION }} > minor.txt
+          expr ${{ env.PATCH_VERSION }} > patch.txt
 
       - name: npm version
         run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
@@ -90,4 +94,7 @@ jobs:
           path: |
             ./dist    
             ./package.json 
+            ./major.txt
+            ./minor.txt
+            ./patch.txt
 
