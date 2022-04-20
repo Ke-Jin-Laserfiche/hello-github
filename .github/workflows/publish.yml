@@ -45,9 +45,9 @@ jobs:
 
       - shell: bash
         run: |
-          echo "major=`cat major.txt`" >> $GITHUB_ENV
-          echo "minor=`cat minor.txt`" >> $GITHUB_ENV
-          echo "patch=`cat patch.txt`" >> $GITHUB_ENV
+          echo "major=`cat npm-publish-artifact/major.txt`" >> $GITHUB_ENV
+          echo "minor=`cat npm-publish-artifact/minor.txt`" >> $GITHUB_ENV
+          echo "patch=`cat npm-publish-artifact/patch.txt`" >> $GITHUB_ENV
 
       - name: echo major
         run: echo ${{env.major}}
