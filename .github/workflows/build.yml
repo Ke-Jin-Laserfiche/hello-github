@@ -39,6 +39,9 @@ jobs:
 
       - name: Echo event
         run: echo ${{github.event_name}}
+
+      - name: Echo run id
+        run: echo ${{GITHUB_RUN_ID}}
         
       - name: Echo event
         run: echo ${{github.event_path}}
