@@ -39,7 +39,10 @@ jobs:
 
       - name: Echo event
         run: echo ${{github.event_name}}
-        
+
+      - name: Echo run id
+        run: echo ${{github.run_id}}
+
       - name: Echo event
         run: echo ${{github.event_path}}
         
@@ -87,5 +90,4 @@ jobs:
           path: |
             ./dist    
             ./package.json 
-
 
