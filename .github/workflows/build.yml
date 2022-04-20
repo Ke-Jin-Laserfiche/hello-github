@@ -41,7 +41,7 @@ jobs:
         run: echo ${{github.event_name}}
 
       - name: Echo run id
-        run: echo ${{GITHUB_RUN_ID}}
+        run: echo ${{github.run_id}}
         
       - name: Echo event
         run: echo ${{github.event_path}}
