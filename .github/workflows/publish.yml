@@ -67,7 +67,8 @@ jobs:
         run: echo "NpmPackageVersion=${{ needs.validation.outputs.major }}.${{ needs.validation.outputs.minor }}.${{ needs.validation.outputs.patch }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
       - name: npm version
-        run: npm --prefix ./npm-publish-artifact version ${{ env.NpmPackageVersion }} --no-git-tag-version
+        run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
+        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -75,7 +76,8 @@ jobs:
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
 
       - name: Npm publish
-        run: npm --prefix ./npm-publish-artifact publish  --access public  --tag next
+        run: npm publish  --access public  --tag next
+        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -99,7 +101,8 @@ jobs:
 
 
       - name: npm version
-        run: npm --prefix ./npm-publish-artifact version ${{ env.NpmPackageVersion }} --no-git-tag-version
+        run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
+        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -107,7 +110,8 @@ jobs:
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
 
       - name: Npm publish
-        run: npm --prefix ./npm-publish-artifact publish  --access public  --tag latest
+        run: npm publish  --access public  --tag latest
+        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
