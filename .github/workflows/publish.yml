@@ -66,8 +66,6 @@ jobs:
       - name: set up variable -- NpmPackageVersion
         run: echo "NpmPackageVersion=${{ needs.validation.outputs.major }}.${{ needs.validation.outputs.minor }}.${{ needs.validation.outputs.patch }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
-      - name: move 
-
       - name: npm version
         run: npm --prefix ./npm-publish-artifact version ${{ env.NpmPackageVersion }} --no-git-tag-version
         env:
