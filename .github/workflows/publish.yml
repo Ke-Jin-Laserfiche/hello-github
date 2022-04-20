@@ -27,9 +27,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Download artifact
-          uses: dawidd6/action-download-artifact@v2
-          with:
-            workflow: "build"
-            workflow_conclusion: success
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: "build"
+          workflow_conclusion: success
 
 # This is a basic workflow to help you get started with Actions
