@@ -85,5 +85,5 @@ jobs:
           name: npm-publish-artifact
           # A file, directory or wildcard pattern that describes what to upload
           path: |
-          ./dist    
-          ./package.json 
+            ./dist    
+            ./package.json 
