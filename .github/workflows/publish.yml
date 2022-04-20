@@ -19,7 +19,10 @@ jobs:
       - run: echo 'The triggering workflow passed'
 
       - name: echo github context
-        run: echo ${{toJson(github)}}
+        run: echo "GitEventPayload=${{toJson(github)}}" >> $GITHUB_ENV
+
+      - name: echo github run id
+        run: echo ${{GitEventPayload.event.workflow_run.id}}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Download artifact
