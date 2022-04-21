@@ -15,7 +15,7 @@ jobs:
   validation:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-#     if: ${{ github.run_attempt != '1' }} # automatically triggered has run_attemp == 1
+#     if: ${{ github.run_attempt != "1" }} # automatically triggered has run_attempt == 1
     outputs:
       major: ${{ env.major }}
       minor: ${{ env.minor }}
@@ -25,8 +25,12 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo 'The triggering workflow passed'
 
+      - name: echo git run_attempt
+        run: echo ${{github.run_attempt }} 
+      
+      
       - name: echo github event
-        run: echo "GitEventPayload=${{ toJson(github) }}" >> $GITHUB_ENV
+        run: echo "GitEventPayload=${{ github.run_attempt }}" >> $GITHUB_ENV
 
       - name: echo github event
         run: echo ${{env.GitEventPayload}}
