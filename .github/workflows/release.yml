@@ -16,13 +16,12 @@ jobs:
   validation:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    if: ${{ github.run_attempt != 1 }}
 
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run tag name
-        run: echo ${{github.ref_name}}
+      - name: echo github content
+        run: echo ${{github}}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Download artifact
