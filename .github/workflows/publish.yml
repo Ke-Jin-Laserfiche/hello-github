@@ -4,16 +4,10 @@ name: publish
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-#   workflow_run:
-#     workflows: ["build"]
-#     types: [completed]
-  workflow_dispatch:
-    inputs:
-      workflow_id: 
-        description: build workflow id
-        type: string
-        required: true
+  workflow_run:
+    workflows: ["build"]
+    types: [completed]
+
         
         
 
@@ -21,7 +15,7 @@ jobs:
   validation:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion != 'success' }} # TODO: change it back
     outputs:
       major: ${{ env.major }}
       minor: ${{ env.minor }}
