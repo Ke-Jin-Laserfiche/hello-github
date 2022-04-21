@@ -1,13 +1,23 @@
 # This is a basic workflow to help you get started with Actions
 
-name: release2
+name: build-and-publish
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    tags:
-      - 'v\d+.\d+.\d+'
+  workflow_dispatch:
+    inputs:
+      isProduction:
+        description: 'production build'
+        type: boolean
+        required: true
+        default: 'false'
+   
+env:
+  isProduction: 'false'
+  MAJOR_VERSION: 1
+  MINOR_VERSION: 0
+  PATCH_VERSION: 8
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -42,6 +52,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     environment: preview
+    if: ${{ github.run_attempt != 1 }}
     needs: [ build ]
     steps:
 
@@ -51,7 +62,7 @@ jobs:
           name: npm-publish-artifact
 
       - name: set up variable -- NpmPackageVersion
-        run: echo "NpmPackageVersion=${{github.ref_name}}--preview-${{ github.run_id }}" >> $GITHUB_ENV
+        run: echo "NpmPackageVersion=${{env.MAJOR_VERSION}}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
       - name: npm version
         run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
@@ -71,6 +82,7 @@ jobs:
 
   production:
     runs-on: ubuntu-latest
+    if: ${{ github.run_attempt != 1 }}
     environment: production
     needs: [ build, preview ]
     steps:
@@ -81,7 +93,7 @@ jobs:
           name: npm-publish-artifact
 
       - name: set up variable -- NpmPackageVersion
-        run: echo "NpmPackageVersion=${{github.ref_name}}" >> $GITHUB_ENV
+        run: echo "NpmPackageVersion=${{env.MAJOR_VERSION}}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
 
 
       - name: npm version
