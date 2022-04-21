@@ -11,20 +11,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run tag name
-        run: echo ${{github.ref_name}}
 
   validation:
     # The type of runner that the job will run on
@@ -33,11 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: echo github context
-        run: echo "GitEventPayload=${{ github.event.workflow_run.id }}" >> $GITHUB_ENV
-
-      - name: echo github run id
-        run: echo ${{env.GitEventPayload}}
+      - name: Run tag name
+        run: echo ${{github.ref_name}}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Download artifact
@@ -49,7 +33,7 @@ jobs:
 
   preview:
     runs-on: ubuntu-latest
-    environment: production
+    environment: preview
     needs: [ validation ]
     steps:
 
