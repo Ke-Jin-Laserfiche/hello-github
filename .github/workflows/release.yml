@@ -42,6 +42,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
+          branch: main
 
       - name: set up variable -- NpmPackageVersion
         run: echo "NpmPackageVersion=${{github.ref_name}}--preview-${{ github.run_id }}" >> $GITHUB_ENV
@@ -75,6 +76,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
+          branch: main
 
       - name: set up variable -- NpmPackageVersion
         run: echo "NpmPackageVersion=${{github.ref_name}}" >> $GITHUB_ENV
