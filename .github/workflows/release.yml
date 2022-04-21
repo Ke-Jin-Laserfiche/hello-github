@@ -31,3 +31,93 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+          
+          jobs:
+  validation:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: echo github context
+        run: echo "GitEventPayload=${{ github.event.workflow_run.id }}" >> $GITHUB_ENV
+
+      - name: echo github run id
+        run: echo ${{env.GitEventPayload}}
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+
+
+  preview:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [ validation ]
+    steps:
+
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+
+      - name: set up variable -- NpmPackageVersion
+        run: echo "NpmPackageVersion=${{github.ref_name}}--preview-${{ github.run_id }}" >> $GITHUB_ENV
+
+      - name: npm version
+        run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
+        working-directory: ./npm-publish-artifact
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+
+      - name: Npm publish
+        run: npm publish  --access public  --tag next
+        working-directory: ./npm-publish-artifact
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+
+  production:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: [ validation, preview ]
+    steps:
+
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+
+      - name: set up variable -- NpmPackageVersion
+        run: echo "NpmPackageVersion=${{github.ref_name}}" >> $GITHUB_ENV
+
+
+      - name: npm version
+        run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
+        working-directory: ./npm-publish-artifact
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+
+      - name: Npm publish
+        run: npm publish  --access public  --tag latest
+        working-directory: ./npm-publish-artifact
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
+          NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
+          NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+
