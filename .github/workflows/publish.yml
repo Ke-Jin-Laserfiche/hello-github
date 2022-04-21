@@ -26,7 +26,7 @@ jobs:
       - run: echo 'The triggering workflow passed'
 
       - name: echo github event
-        run: echo "GitEventPayload=${{ toJson(github.event) }}" >> $GITHUB_ENV
+        run: echo "GitEventPayload=${{ toJson(github) }}" >> $GITHUB_ENV
 
       - name: echo github event
         run: echo ${{env.GitEventPayload}}
