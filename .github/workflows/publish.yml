@@ -5,9 +5,17 @@ name: publish
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  workflow_run:
-    workflows: ["build"]
-    types: [completed]
+#   workflow_run:
+#     workflows: ["build"]
+#     types: [completed]
+  workflow_dispatch:
+    inputs:
+      workflow_id: 
+        description: build workflow id
+        type: string
+        required: true
+        
+        
 
 jobs:
   validation:
@@ -35,6 +43,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
+          run_id: ${{ env.workflow_id }}
 
       - shell: bash
         run: |
