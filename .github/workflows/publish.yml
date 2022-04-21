@@ -15,7 +15,7 @@ jobs:
   validation:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-#     if: ${{ github.run_attempt != 1 }} # automatically triggered has run_attempt == 1
+    if: ${{ github.run_attempt != 1 }} # automatically triggered has run_attempt == 1
     outputs:
       major: ${{ env.major }}
       minor: ${{ env.minor }}
