@@ -41,7 +41,6 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          run_id: ${{ env.workflow_id }}
 
       - shell: bash
         run: |
