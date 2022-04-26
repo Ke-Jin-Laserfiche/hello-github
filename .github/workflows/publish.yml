@@ -102,6 +102,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
+          name: npm-publish-artifact
 
       - name: set up variable -- NpmPackageVersion
         run: echo "NpmPackageVersion=${{ needs.validation.outputs.major }}.${{ needs.validation.outputs.minor }}.${{ needs.validation.outputs.patch }}" >> $GITHUB_ENV
