@@ -1,0 +1,17 @@
+name: called
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  validation:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: echo version
+        run: echo ${{ inputs.version }}
+     
