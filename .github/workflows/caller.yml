@@ -27,6 +27,6 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   call-workflow:
-    uses: Ke-Jin-Laserfiche/hello-github/.github/workflows/called.yml@validation
+    uses: Ke-Jin-Laserfiche/hello-github/.github/workflows/called.yml@main
     with:
       version: ${{env.MAJOR_VERSION}}.${{env.MINOR_VERSION}}.${{env.PATCH_VERSION}}
