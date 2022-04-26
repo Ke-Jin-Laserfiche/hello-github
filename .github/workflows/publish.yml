@@ -15,7 +15,6 @@ jobs:
   validation:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    if: ${{ github.run_attempt != 1 }} # automatically triggered has run_attempt == 1
     outputs:
       major: ${{ env.major }}
       minor: ${{ env.minor }}
@@ -41,12 +40,13 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
+          name: npm-publish-artifact
 
       - shell: bash
         run: |
-          echo "major=`cat npm-publish-artifact/major.txt`" >> $GITHUB_ENV
-          echo "minor=`cat npm-publish-artifact/minor.txt`" >> $GITHUB_ENV
-          echo "patch=`cat npm-publish-artifact/patch.txt`" >> $GITHUB_ENV
+          echo "major=`cat major.txt`" >> $GITHUB_ENV
+          echo "minor=`cat minor.txt`" >> $GITHUB_ENV
+          echo "patch=`cat patch.txt`" >> $GITHUB_ENV
 
       - name: echo major
         run: echo ${{env.major}}
@@ -60,6 +60,7 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     environment: production
+    if: ${{ github.run_attempt != 1 }}
     needs: [ validation ]
     steps:
 
@@ -68,13 +69,13 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
+          name: npm-publish-artifact
 
       - name: set up variable -- NpmPackageVersion
         run: echo "NpmPackageVersion=${{ needs.validation.outputs.major }}.${{ needs.validation.outputs.minor }}.${{ needs.validation.outputs.patch }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
       - name: npm version
         run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
-        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -83,7 +84,6 @@ jobs:
 
       - name: Npm publish
         run: npm publish  --access public  --tag next
-        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -93,6 +93,7 @@ jobs:
   production:
     runs-on: ubuntu-latest
     environment: production
+    if: ${{ github.run_attempt != 1 }}
     needs: [ validation, preview ]
     steps:
 
@@ -108,7 +109,6 @@ jobs:
 
       - name: npm version
         run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
-        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
@@ -117,7 +117,6 @@ jobs:
 
       - name: Npm publish
         run: npm publish  --access public  --tag latest
-        working-directory: ./npm-publish-artifact
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
