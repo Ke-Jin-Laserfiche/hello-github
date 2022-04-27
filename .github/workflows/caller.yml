@@ -29,4 +29,4 @@ jobs:
   call-workflow:
     uses: Ke-Jin-Laserfiche/hello-github/.github/workflows/called.yml@main
     with:
-      version:1.0.8
+      version: 1.0.8
