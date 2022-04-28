@@ -94,7 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     if: ${{ github.run_attempt != 1 }}
-    needs: [ validation, preview ]
+    needs: [ preview ]
     steps:
 
       - name: Download artifact
