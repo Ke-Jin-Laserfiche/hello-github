@@ -8,17 +8,17 @@ jobs:
     name: Job A
     runs-on: ubuntu-latest
     steps:
-      - run: true
+      - run: echo "job A"
 
   job-b:
     name: Job B
     runs-on: ubuntu-latest
     steps:
-      - run: true
+      - run: echo "job B"
 
   job-c:
     name: Job C
     runs-on: ubuntu-latest
     needs: [ job-a, job-b ]
     steps:
-      - run: true
+      - run: echo "job C"
