@@ -54,8 +54,10 @@ jobs:
     environment: preview
     if: ${{ github.run_attempt != 1 }}
     needs: [ build ]
+    outputs: 
+      NpmPackageVersion: ${{ env.NpmPackageVersion }}
     steps:
-
+      - uses: actions/checkout@v2
       - name: Download a Build Artifact
         uses: actions/download-artifact@v2.1.0
         with:
@@ -79,14 +81,21 @@ jobs:
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
+          
+      - name: Tag commit
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{ env.NpmPackageVersion }}
+          commit_sha: ${{ github.sha }}
+          message: Workflow run ${{github.server_url}}/${{github.repository}}/actions/runs/${{ github.run_id}} 
 
   production:
     runs-on: ubuntu-latest
     if: ${{ github.run_attempt != 1 }}
     environment: production
-    needs: [ build, preview ]
+    needs: [ build ]
     steps:
-
+      - uses: actions/checkout@v2
       - name: Download a Build Artifact
         uses: actions/download-artifact@v2.1.0
         with:
@@ -111,4 +120,39 @@ jobs:
           NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
           NPM_EMAIL: ${{ secrets.NPM_EMAIL }}
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}       
-            
+          
+      - name: Tag commit
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{ env.NpmPackageVersion }}
+          commit_sha: ${{ github.sha }}
+          message: Workflow run ${{github.server_url}}/${{github.repository}}/actions/runs/${{ github.run_id}} 
+ 
+  clean_up_preview_package_and_tag:
+    runs-on: ubuntu-latest
+    environment: npm_production
+    if: ${{ github.run_attempt != 1 }}
+    needs: [ preview, production ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.sha }
+          
+      - name: Set NpmPackageName
+        run: |
+          SHOWNAME=$(npm view . name)
+          echo "NpmPackageName=$SHOWNAME" >> $GITHUB_ENV
+          
+      - name: echo NpmPackageName
+        run: echo ${{ env.NpmPackageName }}
+      
+      - name: Npm unpublish preview package
+        run: npm unpublish ${{ env.NpmPackageName }}@${{ needs.preview.outputs.NpmPackageVersion }}
+        
+      - name: Delete prelease tag
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: false
+          tag_name: ${{ needs.preview.outputs.NpmPackageVersion }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
