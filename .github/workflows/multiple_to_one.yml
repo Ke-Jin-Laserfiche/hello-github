@@ -5,13 +5,16 @@ on:
 
 jobs:
   job-a:
+  
     name: Job A
     runs-on: ubuntu-latest
+    if: ${{ github.run_attempt != 1 }}
     steps:
       - run: echo "job A"
 
   job-b:
     name: Job B
+    if: ${{ github.run_attempt != 1 }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "job B"
