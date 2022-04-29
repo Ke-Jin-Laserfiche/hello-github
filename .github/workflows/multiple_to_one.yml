@@ -2,6 +2,8 @@ name: 'From N jobs to 1 job'
 
 on:
   workflow_dispatch:
+  push: 
+    branches: [main]
 
 jobs:
   job-a:
@@ -25,4 +27,4 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ job-a, job-b ]
     steps:
-      - run: echo ${{needs.job-b}}
+      - run: echo ${{toJSON(needs.job-b)}}
