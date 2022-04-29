@@ -21,7 +21,7 @@ jobs:
 
   job-c:
     name: Job C
-    if: contains(needs.job-a.result, 'success') && contains(needs.job-b.result, 'success')
+    if: ${{ contains(needs.job-a.result, 'success') && contains(needs.job-b.result, 'success') }}
     runs-on: ubuntu-latest
     needs: [ job-a, job-b ]
     steps:
