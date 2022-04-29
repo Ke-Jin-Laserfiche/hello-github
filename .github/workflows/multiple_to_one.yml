@@ -9,22 +9,30 @@ jobs:
   job-a:
   
     name: Job A
+    outputs:
+      Success: ${{ env.Success }}
     runs-on: ubuntu-latest
     if: ${{ github.run_attempt != 1 }}
     steps:
       - run: echo "job A"
+      - name: set Success
+        run: echo "Success='true'" >> $GITHUB_ENV
 
   job-b:
     name: Job B
+    outputs:
+      Success: ${{ env.Success }}
     if: ${{ github.run_attempt != 1 }}
     runs-on: ubuntu-latest
     steps:
       - run: echo "job B"
+      - name: set Success
+        run: echo "Success='true'" >> $GITHUB_ENV
 
   job-c:
     name: Job C
     needs: [ job-a, job-b ]
-    if: ${{ contains(needs.job-a.result, 'success') && contains(needs.job-b.result, 'success') }}
+    if: ${{ contains(needs.publish_to_npm_preview.outputs.Success, 'true') && contains(needs.publish_to_npm_release.outputs.Success, 'true') }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{toJSON(github)}}
+      - run: echo "job C"
