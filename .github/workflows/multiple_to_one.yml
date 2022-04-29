@@ -27,4 +27,4 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ job-a, job-b ]
     steps:
-      - run: echo ${{toJSON(needs)}}
+      - run: echo ${{toJSON(github)}}
