@@ -41,7 +41,15 @@ jobs:
 
       - name: Echo run id
         run: echo ${{github.run_id}}
-
+        
+      - name: Set NpmPackageName
+        run: |
+          SHOWNAME=$(npm view . name)
+          echo "NpmPackageName=$SHOWNAME" >> $GITHUB_ENV
+          
+      - name: echo NpmPackageName
+        run: echo ${{ env.NpmPackageName }}
+          
       - name: Echo event
         run: echo ${{github.event_path}}
         
