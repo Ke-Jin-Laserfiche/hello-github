@@ -136,7 +136,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: ${{ github.sha }
+          ref: ${{ github.sha }}
           
       - name: Set NpmPackageName
         run: |
