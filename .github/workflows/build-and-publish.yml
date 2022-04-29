@@ -130,7 +130,7 @@ jobs:
  
   clean_up_preview_package_and_tag:
     runs-on: ubuntu-latest
-    environment: npm_production
+    environment: production
     if: ${{ github.run_attempt != 1 }}
     needs: [ preview, production ]
     steps:
