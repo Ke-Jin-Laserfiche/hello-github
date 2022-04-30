@@ -142,7 +142,7 @@ jobs:
     if: ${{ github.run_attempt != 1 }}
     needs: [ build ]
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix: ${{ steps.set-matrix.outputs.NpmVersionsArray }}
       NpmPackageName: ${{ env.NpmPackageName }}
     steps:
       - uses: actions/checkout@v2
@@ -157,16 +157,17 @@ jobs:
       - name: echo NpmPackageName
         run: echo ${{ env.NpmPackageName }}
         
-#       - name: Set NpmVersionsArray
-#         run: |
-#           echo 'NpmVersionsArray<<EOF' >> $GITHUB_ENV
-#           npm view ${{env.NpmPackageName}} versions --json >> $GITHUB_ENV
-#           echo 'EOF' >> $GITHUB_ENV
-
       - name: Set NpmVersionsArray
         id: set-matrix
         run: |
-          echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions)"
+          VERSIONARR=$(npm view ${{env.NpmPackageName}} versions)
+          VERSIONARRLINE=$(echo "${myArray[@]}")
+          echo "::set-output name=NpmVersionsArray:echo $VERSIONARRLINE"
+
+#       - name: Set NpmVersionsArray
+#         id: set-matrix
+#         run: |
+#           echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions)"
           
         
   delete_preview_package:
