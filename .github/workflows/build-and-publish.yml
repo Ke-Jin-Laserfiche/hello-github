@@ -158,7 +158,7 @@ jobs:
         
       - name: Set NpmVersionsArray
         run: |
-          PKGVERS=$(npm view ${{env.NpmPackageName}} versions)
+          PKGVERS=$(npm view ${{env.NpmPackageName}} versions --json)
           echo "NpmVersionsArray=$PKGVERS" >> $GITHUB_ENV
           
       - name: echo NpmVersionsArray
