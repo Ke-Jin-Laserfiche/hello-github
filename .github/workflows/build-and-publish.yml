@@ -136,7 +136,7 @@ jobs:
       - name: set Success
         run: echo "Success='true'" >> $GITHUB_ENV
         
-  clean_up_preview_package_and_tag:
+  delete_preview_package_and_tag:
     runs-on: ubuntu-latest
     environment: production
     if: ${{ github.run_attempt != 1 }}
@@ -158,8 +158,9 @@ jobs:
         
       - name: Set NpmVersionsArray
         run: |
-          PKGVERS=$(npm view ${{env.NpmPackageName}} versions --json)
-          echo "NpmVersionsArray=$PKGVERS" >> $GITHUB_ENV
+          echo 'NpmVersionsArray<<EOF' >> $GITHUB_ENV
+          npm view ${{env.NpmPackageName}} versions --json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
           
       - name: echo NpmVersionsArray
         run: echo ${{ env.NpmVersionsArray }}
