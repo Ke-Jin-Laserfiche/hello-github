@@ -142,7 +142,8 @@ jobs:
     if: ${{ github.run_attempt != 1 }}
     needs: [ build ]
     outputs:
-      matrix: ${{ steps.matrix.outputs.value }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      NpmPackageName: ${{ env.NpmPackageName }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -156,17 +157,29 @@ jobs:
       - name: echo NpmPackageName
         run: echo ${{ env.NpmPackageName }}
         
+#       - name: Set NpmVersionsArray
+#         run: |
+#           echo 'NpmVersionsArray<<EOF' >> $GITHUB_ENV
+#           npm view ${{env.NpmPackageName}} versions --json >> $GITHUB_ENV
+#           echo 'EOF' >> $GITHUB_ENV
+
       - name: Set NpmVersionsArray
+        id: set-matrix
         run: |
-          echo 'NpmVersionsArray<<EOF' >> $GITHUB_ENV
-          npm view ${{env.NpmPackageName}} versions --json >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions --json)"
           
-      - name: echo NpmVersionsArray
-        run: echo ${{ env.NpmVersionsArray }}
+        
+  delete_preview_package:
+      runs-on: ubuntu-latest
+      environment: production
+      needs: [ delete_preview_package_and_tag ]
+      strategy:
+        matrix:
+          version: ${{ fromJson(needs.delete_preview_package_and_tag.outputs.matrix) }}
+      steps:
       
-#       - name: Npm unpublish preview package
-#         run: npm unpublish ${{ env.NpmPackageName }}@${{ needs.preview.outputs.NpmPackageVersion }}
+      - name: Npm unpublish preview package
+        run: npm unpublish ${{ needs.delete_preview_package_and_tag.outputs.NpmPackageName }}@${{ matrix.version }}
         
 #       - name: Delete prelease tag
 #         uses: dev-drprasad/delete-tag-and-release@v0.2.0
