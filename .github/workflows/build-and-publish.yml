@@ -98,8 +98,6 @@ jobs:
     if: ${{ github.run_attempt != 1 }}
     environment: production
     needs: [ build ]
-    outputs:
-      Success: ${{ env.Success }}
     steps:
       - uses: actions/checkout@v2
       - name: Download a Build Artifact
@@ -141,9 +139,6 @@ jobs:
     environment: production
     if: ${{ github.run_attempt != 1 }}
     needs: [ build ]
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.NpmVersionsArray }}
-      NpmPackageName: ${{ env.NpmPackageName }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -168,7 +163,9 @@ jobs:
 #         id: set-matrix
 #         run: |
 #           echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions)"
-          
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.NpmVersionsArray }}
+      NpmPackageName: ${{ env.NpmPackageName }}
         
   delete_preview_package:
       runs-on: ubuntu-latest
