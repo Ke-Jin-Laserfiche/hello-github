@@ -174,7 +174,7 @@ jobs:
       needs: [ delete_preview_package_and_tag ]
       strategy:
         matrix:
-          version: ${{ fromJson(needs.delete_preview_package_and_tag.outputs.matrix) }}
+          version: ${{ needs.delete_preview_package_and_tag.outputs.matrix }}
       steps:
       
       - name: Npm unpublish preview package
