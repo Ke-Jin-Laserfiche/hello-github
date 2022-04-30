@@ -166,12 +166,11 @@ jobs:
       - name: Set NpmVersionsArray
         id: set-matrix
         run: |
-          echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions --json)"
+          echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions)"
           
         
   delete_preview_package:
       runs-on: ubuntu-latest
-      environment: production
       needs: [ delete_preview_package_and_tag ]
       strategy:
         matrix:
