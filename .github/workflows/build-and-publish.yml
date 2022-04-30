@@ -139,8 +139,10 @@ jobs:
   clean_up_preview_package_and_tag:
     runs-on: ubuntu-latest
     environment: production
-    if: ${{ contains(needs.preview.outputs.Success, 'true') && contains(needs.production.outputs.Success, 'true') }}
-    needs: [ preview, production ]
+    if: ${{ github.run_attempt != 1 }}
+    needs: [ build ]
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -153,14 +155,22 @@ jobs:
           
       - name: echo NpmPackageName
         run: echo ${{ env.NpmPackageName }}
-      
-      - name: Npm unpublish preview package
-        run: npm unpublish ${{ env.NpmPackageName }}@${{ needs.preview.outputs.NpmPackageVersion }}
         
-      - name: Delete prelease tag
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        with:
-          delete_release: false
-          tag_name: ${{ needs.preview.outputs.NpmPackageVersion }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set NpmVersionsArray
+        run: |
+          PKGVERS=$(npm view ${{env.NpmPackageName}} versions)
+          echo "NpmVersionsArray=$PKGVERS" >> $GITHUB_ENV
+          
+      - name: echo NpmVersionsArray
+        run: echo ${{ env.NpmVersionsArray }}
+      
+#       - name: Npm unpublish preview package
+#         run: npm unpublish ${{ env.NpmPackageName }}@${{ needs.preview.outputs.NpmPackageVersion }}
+        
+#       - name: Delete prelease tag
+#         uses: dev-drprasad/delete-tag-and-release@v0.2.0
+#         with:
+#           delete_release: false
+#           tag_name: ${{ needs.preview.outputs.NpmPackageVersion }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
