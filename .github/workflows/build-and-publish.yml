@@ -158,6 +158,9 @@ jobs:
           VERSIONARR=$(npm view ${{env.NpmPackageName}} versions)
           VERSIONARRLINE=$(echo "$VERSIONARR")
           echo "::set-output name=NpmVersionsArray:$VERSIONARRLINE"
+          
+      - name: echo array
+        run: echo {{ env.NpmVersionsArray}}
 
 #       - name: Set NpmVersionsArray
 #         id: set-matrix
