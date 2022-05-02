@@ -156,10 +156,16 @@ jobs:
         id: set-matrix
         run: |
           VERSIONARR=$(npm view ${{env.NpmPackageName}} versions)
-          echo "::set-output name=NpmVersionsArray:$VERSIONARR"
+          echo "::set-output name=matrix:$VERSIONARR"
           
-      - name: echo array
-        run: echo ${{ steps.set-matrix.outputs.NpmVersionsArray }}
+      - id: check-matrix
+        name: Check matrix      
+        run: |
+          if [[ ${{ steps.set-matrix.outputs.matrix }} == *"[]"* ]]; then
+            echo "empty"
+          else
+            echo "not empty"        
+          fi
         
 
 #       - name: Set NpmVersionsArray
@@ -167,7 +173,7 @@ jobs:
 #         run: |
 #           echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions)"
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.NpmVersionsArray }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
       NpmPackageName: ${{ env.NpmPackageName }}
         
   delete_preview_package:
