@@ -156,15 +156,11 @@ jobs:
         id: set-matrix
         run: |
           VERSIONARR=$(npm view ${{env.NpmPackageName}} versions)
-          VERSIONARRLINE=$(echo "$VERSIONARR")
-          echo "::set-output name=NpmVersionsArray:$VERSIONARRLINE"
-          echo "NpmVersionsArray=$VERSIONARRLINE" >> $GITHUB_ENV
+          echo "::set-output name=NpmVersionsArray:$VERSIONARR"
           
       - name: echo array
         run: echo ${{ steps.set-matrix.outputs.NpmVersionsArray }}
         
-      - name: echo array
-        run: echo ${{ env.NpmVersionsArray }}
 
 #       - name: Set NpmVersionsArray
 #         id: set-matrix
@@ -173,7 +169,6 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.NpmVersionsArray }}
       NpmPackageName: ${{ env.NpmPackageName }}
-      NpmVersionsArray: ${{ env.NpmVersionsArray }}
         
   delete_preview_package:
       runs-on: ubuntu-latest
@@ -186,8 +181,6 @@ jobs:
         - name: echo matrix
           run:  echo ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.matrix) }}
           
-        - name: echo NpmVersionsArray
-          run:  echo ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.NpmVersionsArray) }}
       
 #       - name: Npm unpublish preview package
 #         run: npm unpublish ${{ needs.delete_preview_package_and_tag.outputs.NpmPackageName }}@${{ matrix.version }}
