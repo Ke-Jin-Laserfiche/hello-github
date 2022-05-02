@@ -139,6 +139,10 @@ jobs:
     environment: production
     if: ${{ github.run_attempt != 1 }}
     needs: [ build ]
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      empty_matrix: ${{ steps.check-matrix.outputs.empty_matrix }}
+      NpmPackageName: ${{ env.NpmPackageName }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -162,9 +166,9 @@ jobs:
         name: Check matrix      
         run: |
           if [[ ${{ steps.set-matrix.outputs.matrix }} == *"[]"* ]]; then
-            echo "empty"
+            echo "::set-output name=empty_matrix::true"
           else
-            echo "not empty"        
+            echo "::set-output name=empty_matrix::false"   
           fi
         
 
@@ -172,9 +176,6 @@ jobs:
 #         id: set-matrix
 #         run: |
 #           echo "::set-output name=matrix::$(npm view ${{env.NpmPackageName}} versions)"
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-      NpmPackageName: ${{ env.NpmPackageName }}
         
   delete_preview_package:
       runs-on: ubuntu-latest
