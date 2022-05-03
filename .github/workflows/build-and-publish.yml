@@ -161,7 +161,7 @@ jobs:
         run: |
           VERSIONARR=$(npm view ${{env.NpmPackageName}} versions)
           VERSIONS=$(echo $VERSIONARR)
-          echo "::set-output name=matrix:${VERSION}"
+          echo "::set-output name=matrix::${VERSION}"
           
       - id: check-matrix
         name: Check matrix      
