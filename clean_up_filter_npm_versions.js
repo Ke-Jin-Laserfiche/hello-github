@@ -12,7 +12,7 @@ async function main() {
       var newArray = JSON.parse(stdout).filter(function (el) {
           return el.includes('preview') && el.includes(currentVersion)
       })
-    return newArray;
+    process.stdout.write(JSON.stringify(newArray));
   });
 
 }
