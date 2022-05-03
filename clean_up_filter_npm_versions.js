@@ -2,7 +2,6 @@ const { exec } = require("child_process");
 async function main() {
   const packageNAme = process.argv[2];
   const currentVersion = process.argv[3];
-  console.log("INPUT: " + packageNAme);
   exec(`npm view ${packageNAme} versions -json`, (error, stdout, stderr) => {
       if (error) {
       console.log(`error: ${error.message}`);
@@ -10,11 +9,9 @@ async function main() {
       if (stderr) {
       console.log(`stderr: ${stderr}`);
       }
-      console.log(`stdout: ${stdout}`);
       var newArray = JSON.parse(stdout).filter(function (el) {
           return el.includes('preview') && el.includes(currentVersion)
       })
-      console.log(newArray);
     return newArray;
   });
 
