@@ -188,6 +188,8 @@ jobs:
 #           version: ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.matrix) }}
       steps:
       
+        - name: echo empty_matrix
+          run:  echo ${{ needs.delete_preview_package_and_tag.outputs.empty_matrix }}
         - name: echo matrix
           run:  echo ${{ needs.delete_preview_package_and_tag.outputs.matrix }}
         - name: echo matrix
