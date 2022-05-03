@@ -165,14 +165,14 @@ jobs:
           echo "${VERSIONS}"
           echo "::set-output name=matrix::$(echo ${VERSIONARR})"
           
-      - id: check-matrix
-        name: Check matrix      
-        run: |
-          if [[ ${{ steps.set-matrix.outputs.matrix }} == *"[]"* ]]; then
-            echo "::set-output name=empty_matrix::true"
-          else
-            echo "::set-output name=empty_matrix::false"   
-          fi
+#       - id: check-matrix
+#         name: Check matrix      
+#         run: |
+#           if [[ ${{ steps.set-matrix.outputs.matrix }} == *"[]"* ]]; then
+#             echo "::set-output name=empty_matrix::true"
+#           else
+#             echo "::set-output name=empty_matrix::false"   
+#           fi
         
 
 #       - name: Set NpmVersionsArray
@@ -188,8 +188,8 @@ jobs:
 #           version: ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.matrix) }}
       steps:
       
-        - name: echo empty_matrix
-          run:  echo ${{ needs.delete_preview_package_and_tag.outputs.empty_matrix }}
+#         - name: echo empty_matrix
+#           run:  echo ${{ needs.delete_preview_package_and_tag.outputs.empty_matrix }}
         - name: echo matrix
           run:  echo ${{ needs.delete_preview_package_and_tag.outputs.matrix }}
         - name: echo matrix
