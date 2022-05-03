@@ -163,7 +163,7 @@ jobs:
           VERSIONS=$(echo $VERSIONARR)
           echo "${VERSIONARR}"
           echo "${VERSIONS}"
-          echo "::set-output name=matrix::${VERSION}"
+          echo "::set-output name=matrix::${VERSIONARR}"
           
       - id: check-matrix
         name: Check matrix      
