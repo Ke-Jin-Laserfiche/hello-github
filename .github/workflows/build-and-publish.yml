@@ -188,7 +188,8 @@ jobs:
         matrix:
           version: ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.NpmPackageVersionFiltered) }}
       steps:
-      
+            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        -  uses: actions/checkout@v3
         - name: echo matrix
           run:  echo ${{ needs.delete_preview_package_and_tag.outputs.NpmPackageVersionFiltered }}
         - name: echo matrix
