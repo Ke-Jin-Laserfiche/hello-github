@@ -174,7 +174,8 @@ jobs:
         run: |
           \node ./clean_up_filter_npm_versions.js ${{env.NpmPackageName}} ${{ env.VERSION }} > test.txt
           VERSIONS=$(cat test.txt)
-          echo "::set-output name=matrix::$(echo ${VERSIONS})"
+          # echo "::set-output name=matrix::$(echo ${VERSIONS})"
+          echo "::set-output name=matrix::$(cat test.txt)"
 #       - id: check-matrix
 #         name: Check matrix      
 #         run: |
