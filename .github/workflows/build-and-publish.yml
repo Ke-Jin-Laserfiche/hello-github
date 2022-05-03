@@ -169,14 +169,11 @@ jobs:
           echo "::set-output name=matrix::$(echo ${VERSIONARR})"
         # working version end 
           
-      - name: Set NpmVersionsArray
+      - name: Set NpmVersionsArrayFiltered
         id: set-matrix-filtered
         run: |
-          VERSIONARR=$(node ./clean_up_filter_npm_versions.js ${{env.NpmPackageName}} ${{ env.VERSION }})
-          VERSIONS=$(echo $VERSIONARR)
-          echo "${VERSIONARR}"
-          echo "${VERSIONS}"
-          echo "::set-output name=matrix::$(echo ${VERSIONARR})"
+          \node ./clean_up_filter_npm_versions.js ${{env.NpmPackageName}} ${{ env.VERSION }} > test.txt
+          echo "::set-output name=matrix:$(cat test.txt)"
 #       - id: check-matrix
 #         name: Check matrix      
 #         run: |
