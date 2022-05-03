@@ -2,8 +2,8 @@ name: 'From N jobs to 1 job'
 
 on:
   workflow_dispatch:
-  push: 
-    branches: [main]
+#   push: 
+#     branches: [main]
 
 jobs:
   job-a:
