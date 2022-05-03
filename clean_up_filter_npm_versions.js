@@ -15,6 +15,7 @@ async function main() {
           return el.includes('preview') && el.includes(currentVersion)
       })
       console.log(newArray);
+    return newArray;
   });
 
 }
