@@ -14,9 +14,6 @@ on:
    
 env:
   isProduction: 'false'
-  MAJOR_VERSION: 1
-  MINOR_VERSION: 0
-  PATCH_VERSION: 15
   VERSION: "1.0.16"
 
 
@@ -46,9 +43,6 @@ jobs:
           path: |
             ./dist    
             ./package.json 
-            ./major.txt
-            ./minor.txt
-            ./patch.txt
             ./.npmrc
   preview:
     runs-on: ubuntu-latest
@@ -66,7 +60,7 @@ jobs:
           name: npm-publish-artifact
 
       - name: set up variable -- NpmPackageVersion
-        run: echo "NpmPackageVersion=${{env.MAJOR_VERSION}}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
+        run: echo "NpmPackageVersion=${{ env.VERSION }}--preview-${{ github.run_id }}" >> $GITHUB_ENV
 
       - name: npm version
         run: npm version ${{ env.NpmPackageVersion }} --no-git-tag-version
@@ -107,7 +101,7 @@ jobs:
           name: npm-publish-artifact
 
       - name: set up variable -- NpmPackageVersion
-        run: echo "NpmPackageVersion=${{env.MAJOR_VERSION}}.${{ env.MINOR_VERSION }}.${{ env.PATCH_VERSION }}" >> $GITHUB_ENV
+        run: echo "NpmPackageVersion=${{env.VERSION }}" >> $GITHUB_ENV
 
 
       - name: npm version
