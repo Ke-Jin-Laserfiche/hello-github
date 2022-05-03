@@ -17,6 +17,7 @@ env:
   MAJOR_VERSION: 1
   MINOR_VERSION: 0
   PATCH_VERSION: 15
+  VERSION: "1.0.8"
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -143,6 +144,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
       empty_matrix: ${{ steps.check-matrix.outputs.empty_matrix }}
       NpmPackageName: ${{ env.NpmPackageName }}
+      NpmPackageVersionFiltered: ${{ steps.set-matrix-filtered.outputs.matrix }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -156,6 +158,7 @@ jobs:
       - name: echo NpmPackageName
         run: echo ${{ env.NpmPackageName }}
         
+       # working version start 
       - name: Set NpmVersionsArray
         id: set-matrix
         run: |
@@ -164,7 +167,16 @@ jobs:
           echo "${VERSIONARR}"
           echo "${VERSIONS}"
           echo "::set-output name=matrix::$(echo ${VERSIONARR})"
+        # working version end 
           
+      - name: Set NpmVersionsArray
+        id: set-matrix-filtered
+        run: |
+          VERSIONARR=$(node ./clean_up_filter_npm_versions.js ${{env.NpmPackageName}} ${{ env.VERSION }})
+          VERSIONS=$(echo $VERSIONARR)
+          echo "${VERSIONARR}"
+          echo "${VERSIONS}"
+          echo "::set-output name=matrix::$(echo ${VERSIONARR})"
 #       - id: check-matrix
 #         name: Check matrix      
 #         run: |
@@ -185,7 +197,7 @@ jobs:
       needs: [ delete_preview_package_and_tag ]
       strategy:
         matrix:
-          version: ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.matrix) }}
+          version: ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.NpmPackageVersionFiltered) }}
       steps:
       
 #         - name: echo empty_matrix
