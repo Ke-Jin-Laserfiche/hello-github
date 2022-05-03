@@ -185,7 +185,7 @@ jobs:
       needs: [ delete_preview_package_and_tag ]
       strategy:
         matrix:
-          version: ${{ needs.delete_preview_package_and_tag.outputs.matrix }}
+          version: ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.matrix) }}
       steps:
       
 #         - name: echo empty_matrix
