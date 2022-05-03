@@ -173,8 +173,7 @@ jobs:
         id: set-matrix-filtered
         run: |
           \node ./clean_up_filter_npm_versions.js ${{env.NpmPackageName}} ${{ env.VERSION }} > matching_version.txt
-          VERSIONS=$(cat test.txt)
-          echo "::set-output name=matrix::$(cat matching_versio.txt)"
+          echo "::set-output name=matrix::$(cat matching_version.txt)"
           
       - id: check-matrix
         name: Check matrix      
