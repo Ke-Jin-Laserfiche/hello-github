@@ -202,7 +202,7 @@ jobs:
             echo "::set-output name=deprecated::$(cat already_deprecated.txt)"
       
         - name: Npm deprecate preview package
-          if: ${{ steps.check-deprecation.outputs.deprecated == "false" }}
+          if: ${{ steps.check-deprecation.outputs.deprecated == 'false' }}
           run: npm deprecate -f ${{ needs.delete_preview_package_and_tag.outputs.NpmPackageName }}@${{ matrix.version }} "This version has been deprecated. Please upgrade to ${{env.VERSION}} instead."
           env:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
