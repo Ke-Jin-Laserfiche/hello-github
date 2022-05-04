@@ -194,10 +194,16 @@ jobs:
           run:  echo ${{ needs.delete_preview_package_and_tag.outputs.NpmPackageVersionFiltered }}
         - name: echo matrix
           run:  echo ${{ fromJSON(needs.delete_preview_package_and_tag.outputs.NpmPackageVersionFiltered) }}
-          
+        
+        - name: check if npm package already deprecated
+          id: check-deprecation
+          run: |
+            \node ./check_if_npm_package_deprecated.cjs ${{env.NpmPackageName}} ${{ env.VERSION }} > already_deprecated.txt
+            echo "::set-output name=deprecated::$(cat already_deprecated.txt)"
       
-        - name: Npm unpublish preview package
-          run: npm unpublish ${{ needs.delete_preview_package_and_tag.outputs.NpmPackageName }}@${{ matrix.version }}
+        - name: Npm deprecate preview package
+          if: ${{ steps.check-deprecation.outputs.deprecated == "false" }}
+          run: npm deprecate -f ${{ needs.delete_preview_package_and_tag.outputs.NpmPackageName }}@${{ matrix.version }} "This version has been deprecated. Please upgrade to ${{env.VERSION}} instead."
           env:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
             NPM_USERNAME: ${{ secrets.NPM_USERNAME }}
