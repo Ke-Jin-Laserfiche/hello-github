@@ -198,7 +198,7 @@ jobs:
         - name: check if npm package already deprecated
           id: check-deprecation
           run: |
-            \node ./check_if_npm_package_deprecated.cjs ${{env.NpmPackageName}} ${{ env.VERSION }} > already_deprecated.txt
+            \node ./check_if_npm_package_deprecated.cjs ${{needs.delete_preview_package_and_tag.outputs.NpmPackageName}} ${{  matrix.version }} > already_deprecated.txt
             echo "::set-output name=deprecated::$(cat already_deprecated.txt)"
       
         - name: Npm deprecate preview package
