@@ -16,7 +16,10 @@ jobs:
         with:
           ref: ${{ github.sha }}
 
-   
+      - name: echo git context
+        run: |
+          echo ${github}
+
 
       - name: Set GIT_BRANCH
         run: |
