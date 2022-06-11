@@ -16,7 +16,6 @@ jobs:
         with:
           ref: ${{ github.sha }}
 
-   
 
       - name: Set GIT_BRANCH
         run: |
